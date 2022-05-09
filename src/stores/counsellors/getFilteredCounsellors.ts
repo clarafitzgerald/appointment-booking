@@ -7,37 +7,15 @@ export interface getFilteredCousellorsArgs {
     filters: IFilters;
 }
 
-// const checker = (filters: IFilters) => {
-//     if (filters.requiredMedium !== ""){
-//         isMediumOffered;
-//     }
-//     return () => {
-
-//     }
-// };
-
-// const createInclude = (filters:IFilters) => {
-//     const checkMedium =
-//     filters.requiredMedium === ""
-//         ? () => true
-//         : (appointment_mediums: AppointmentMedium) => appointment_mediums.includes(filters.requiredMedium);
-
-//     return checkMedium;
-// };
-
 export const getFilteredCousellors = (counsellors: ICounsellor[], filters: IFilters): Promise<ICounsellor[]> => {
     const apples = new Promise<ICounsellor[]>((resolve) => {
         const filtered= <ICounsellor[]>[];
 
         const { endDate, requiredMedium, requiredSpecialisms, requiredType, startDate, requiredTimes } = filters;
 
-        const checkMedium = requiredMedium === ""
-            ? () => true
-            : (appointment_mediums: AppointmentMedium[]) => appointment_mediums.includes(requiredMedium);
-
         counsellors.forEach(
             ({ appointment_mediums, appointment_types, availability, specialisms, ...rest }) => {
-                const offersRequiredMedium = checkMedium(appointment_mediums);
+                const offersRequiredMedium = isMediumOffered(appointment_mediums, requiredMedium);
                 if (offersRequiredMedium === false){
                     return;
                 }
@@ -79,13 +57,13 @@ export const getFilteredCousellors = (counsellors: ICounsellor[], filters: IFilt
     return apples;
 };
 
-// const isMediumOffered =( offeredMedia: AppointmentMedium[],requiredMedium: AppointmentMedium) => {
-//     if (requiredMedium === ""){
-//         return true;
-//     }
+const isMediumOffered =( offeredMedia: AppointmentMedium[],requiredMedium: AppointmentMedium) => {
+    if (requiredMedium === ""){
+        return true;
+    }
 
-//     return offeredMedia.includes(requiredMedium);
-// };
+    return offeredMedia.includes(requiredMedium);
+};
 
 const isTypeOffered=( offeredTypes:AppointmentType[],requiredType: AppointmentType) => {
     if (requiredType === ""){

@@ -52,9 +52,6 @@ rules:
   jest/expect-expect: off
   jest/valid-expect: off
   keyword-spacing: error
-  linebreak-style:
-    - error
-    - windows
   max-classes-per-file:
     - error
     - 1
